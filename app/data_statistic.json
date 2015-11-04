@@ -1,0 +1,74 @@
+1, Average packet rate in bytes:
+{
+	X:[1,2,3,4],
+	normal_Y:[10,34,23,45],
+	attack_Y:[10,22,33,44],
+	normal_average: 33,
+	normal_max: 21,
+	normal_min: 22,
+	attack_average: 22,
+	attack_max: 21,
+	attack_min; 33
+}
+2, The average packet rate in bits:
+{
+	X:[1,2,3,4],
+	normal_Y:[10,34,23,45],
+	attack_Y:[10,22,33,44],
+	normal_average: 33,
+	normal_max: 21,
+	normal_min: 22,
+	attack_average: 22,
+	attack_max: 21,
+	attack_min; 33
+}
+3, The average packet rate of HTTP, TCP, ICMP and UDP:
+{
+	normal: 
+	{
+	X:[1,2,3,4],
+	normal_HTTP:[10,34,23,45],
+	normal_TCP:[],
+	normal_ICMP:[],
+	normal_UDP:[]
+	}
+	attack:
+	{
+	X:[1,2,3,4],
+	normal_HTTP:[10,34,23,45],
+	normal_TCP:[],
+	normal_ICMP:[],
+	normal_UDP:[]
+	}
+}
+4, The distribution of HTTP, TCP, ICMP, UDP and others: (pie)
+{
+	HTTP: 20%,
+	TCP: 40%,
+	UDP: 20%,
+	ICMP: 10%,
+	others: 10%
+}
+5, The Average Packet Size
+{
+	X:[1,2,3,4],
+	normal_Y:[10,34,23,45],
+	attack_Y:[10,22,33,44],
+	normal_average: 33,
+	normal_max: 21,
+	normal_min: 22,
+	attack_average: 22,
+	attack_max: 21,
+	attack_min: 33
+}
+6, Packet Size distribution (pie)
+
+7, Top 20 IP in the dataset()
+{
+	"127.0.0.1": 20%,
+	"23.34.34.22": 40%,
+	"34.45.21.46": 20%,
+	"93.32.45.67": 10%,
+	...
+	"21.32.44.55": 10%
+}
