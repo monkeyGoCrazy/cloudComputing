@@ -5,7 +5,7 @@ var express = require('express');
 var Map     = require('../models/map').Map;
 var MapHandler = express.Router();
 
-// middleware to use for all requests
+// middleware to use for all requests some new
 MapHandler.use(function(req, res, next) {
 	// do logging
 	console.log('Something is happening.');
