@@ -70,7 +70,7 @@ var ProtocolDistributionSchema = new Schema({
         normal_TCP:Number,
         normal_ICMP:Number,
         normal_UDP:Number,
-        normal_others: Number.]
+        normal_others: Number
 
     },
     attack:{
