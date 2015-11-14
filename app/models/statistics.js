@@ -44,6 +44,24 @@ var AverageProtocolRateSchema = new Schema({
         attack_others:[Number]
     }
 });
+var Top10SendIPData = new Schema({
+	_id: Number,
+	normal:{
+		IP:[{ip:String,rate:Number}]
+	},
+	attack:{
+	    IP:[{ip:String,rate:Number}]
+	}
+});
+var Top10ReceiveIPData = new Schema({
+	_id: Number,
+	normal:{
+		IP:[{ip:String,rate:Number}]
+	},
+	attack:{
+	    IP:[{ip:String,rate:Number}]
+	}
+});
 var ProtocolDistributionSchema = new Schema({
     _id: Number,
     normal:{
@@ -51,7 +69,8 @@ var ProtocolDistributionSchema = new Schema({
         normal_HTTP:Number,
         normal_TCP:Number,
         normal_ICMP:Number,
-        normal_UDP:Number
+        normal_UDP:Number,
+        normal_others: Number.]
 
     },
     attack:{
@@ -77,10 +96,7 @@ var TopCountrySchema = new Schema({
     _id: Number,
     IP:[{country:String, rate:Number}]
 });
-var CountryDistributionSchema = new Schema({
-    _id: Number,
-    IP:[{country:String, rate:Number}]
-});
+
 var BehaviorOfOneIPSchema = new Schema({
     _id: Number,
     IP:[
