@@ -21,9 +21,14 @@ Schema = mongoose.Schema;
 //    falseNegitive: Number
 //});
 var TrainSchema = new Schema({
+    _id: Number,
+    user: String,
     engine: String,
     model: String,
     dataSet: String,
+    status: String,
+    date: {type: Date, default: Date.now},
+    output_model: String,
     LSTMParameters: {
         sequence: Number,
         percentage: Number,
@@ -33,7 +38,7 @@ var TrainSchema = new Schema({
         dropOut: Number,
         lossFunction: String,
         classMode: String,
-        finalActivationFunction: String,
+        finalActivationFunction: String
     },
     CNNParameters:{},
     RNNParameters:{},
