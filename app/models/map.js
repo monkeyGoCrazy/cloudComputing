@@ -12,4 +12,4 @@ var mapSchema = new Schema({
 var Map = mongoose.model('Map', mapSchema);
 module.exports = {
 	Map: Map
-}
+};

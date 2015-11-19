@@ -1,183 +1,50 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+// ROUTES FOR OUR API
+// =============================================================================
+// create our router
+var express = require('express');
+var Statistics  = require('../models/statistics2').Statistics;
 
-var StatisticsSchema = new Schema({
-    _id: Number,
-    user: Number,
-    AveragePacketRate: {
-        normal_X: [Number],
-        attack_X: [Number],
-        normal_Y: [Number],
-        attack_Y: [Number],
-        normal_average: Number,
-        normal_max: Number,
-        normal_min: Number,
-        attack_average: Number,
-        attack_max: Number,
-        attack_min: Number
-    },
-    AveragePacketData: {
-        normal_X: [Number],
-        attack_X: [Number],
-        normal_Y: [Number],
-        attack_Y: [Number],
-        normal_average: Number,
-        normal_max: Number,
-        normal_min: Number,
-        attack_average: Number,
-        attack_max: Number,
-        attack_min: Number
-    },
-    AverageProtocolRate: {
-        normal:{
-            X:[Number],
-            normal_HTTP:[Number],
-            normal_TCP:[Number],
-            normal_ICMP:[Number],
-            normal_UDP:[Number],
-            normal_others:[Number]
-        },
-        attack:{
-            X:[Number],
-            attack_HTTP:[Number],
-            attack_TCP:[Number],
-            attack_ICMP:[Number],
-            attack_UDP:[Number],
-            attack_others:[Number]
-        }
-    },
-    TopSendIPData: {
-        normal:{
-            IP:[{ip:String,rate:Number}]
-        },
-        attack:{
-            IP:[{ip:String,rate:Number}]
-        }
-    },
-    TopReceiveIPData: {
-        normal:{
-            IP:[{ip:String,rate:Number}]
-        },
-        attack:{
-            IP:[{ip:String,rate:Number}]
-        }
-    },
-    ProtocolDistribution: {
-        normal:{
-            X:Number,
-            normal_HTTP:Number,
-            normal_TCP:Number,
-            normal_ICMP:Number,
-            normal_UDP:Number,
-            normal_others: Number
+var Train = require('../models/train').Train;
+var Test = require('../models/test').Test;
 
-        },
-        attack:{
-            X:Number,
-            attack_HTTP:Number,
-            attack_TCP:Number,
-            attack_ICMP:Number,
-            attack_UDP:Number,
-            attack_others:Number
-        }
-    },
-    AveragePacketSize: {
-        X: [Number],
-        normal_Y: [Number],
-        attack_Y: [Number]
-    },
-    //TopIP: {
-    //    IP:[{ip:String,rate:Number}]
-    //},
-    TopCountry: {
-        IP:[{country:String, rate:Number}]
-    },
-    BehaviorOfTopIP: {
-        attackBehaviorOfSource: [{
-            IP: String,
-            Source: {
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours: [{Hour: Number, rate: Number}]
-            },
-            Destination:{
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours:[{Hour: Number, rate: Number}]
-            }
-        }],
-        attackBehaviorOfDestination:  [{
-            IP: String,
-            Source: {
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours: [{Hour: Number, rate: Number}]
-            },
-            Destination:{
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours:[{Hour: Number, rate: Number}]
-            }
-        }],
-        normalBehaviorOfSource:  [{
-            IP: String,
-            Source: {
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours: [{Hour: Number, rate: Number}]
-            },
-            Destination:{
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours:[{Hour: Number, rate: Number}]
-            }
-        }],
-        normalBehaviorOfDestination:  [{
-            IP: String,
-            Source: {
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours: [{Hour: Number, rate: Number}]
-            },
-            Destination:{
-                PacketNumber: Number,
-                FirstConnection: Number,
-                LastConnection: Number,
-                Protocols: [{Name: String, rate: Number}],
-                Country: [{Name: String, rate: Number}],
-                Hours:[{Hour: Number, rate: Number}]
-            }
-        }]
+var StatisticHandler = express.Router();
 
-    }
+// middleware to use for all requests
+StatisticHandler.use(function(req, res, next) {
+    // do logging
+    console.log('statistics is happening.');
+    next();
 });
 
-//model's method: find findByld findOne where
-var Statistics = mongoose.model('Statistics', StatisticsSchema);
+// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+StatisticHandler.route('/')
+    .get(function(req, res) {
+        Statistics.find(function(err, result){
+            if (err)
+                res.send(err);
+            res.json(result);
+        });
+    });
+StatisticHandler.route('/:_id')
+    .get(function(req, res){
+        Statistics.findById(req.params._id, function(err, statistics) {
+            if (err)
+                res.send(err);
+            res.json(statistics);
+        })
+    });
 
 
-module.exports = {
-    Statistics: Statistics
-
-};
+// on routes that end in /bears/:bear_id
+// ----------------------------------------------------
+//StatisticHandler.route('/:record_id')
+//
+//    // get the bear with that id
+//    //.get(function(req, res) {
+//    //    Map.findById(req.params.record_id, function(err, map) {
+//    //        if (err)
+//    //            res.send(err);
+//    //        res.json(map);
+//    //    });
+//    });
+module.exports = StatisticHandler;

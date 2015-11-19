@@ -3,7 +3,7 @@ var express = require('express');
 var server = require('http').Server(app);
 var app = express();
 var io = require('socket.io')(server);
-server.listen(8088,'127.0.0.1');
+server.listen(8089,'127.0.0.1');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var util = require('util');
@@ -18,30 +18,26 @@ var Statistics = require('../models/statistics2').Statistics;
 TrainHandler.use(bodyParser.urlencoded({ extended: true }));
 TrainHandler.use(bodyParser.json());
 // middleware to use for all requests
-//TrainHandler.use(function(req, res, next) {
-//    // do logging
-//    console.log('Something is happening.');
-//    next();
-//});
+
 TrainHandler.use(function(req, res, next) {
     // do logging
     console.log('Something is happening.');
     next();
 });
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-TrainHandler.get('/', function(req, res,next) {
-    Train.find(function(err, result) {
-        if (err)
-            res.send(err);
-
-        res.json(result);
-    });
-    next();
-});
+//TrainHandler.get('/', function(req, res,next) {
+//    Train.find(function(err, result) {
+//        if (err)
+//            res.send(err);
+//
+//        res.json(result);
+//    });
+//    next();
+//});
 
 // on routes that end in /new
 // ----------------------------------------------------
-TrainHandler.route('/new')
+TrainHandler.route('/')
 
     .post(function(req, res) {
         var output = "";
@@ -112,8 +108,9 @@ TrainHandler.route('/new')
                 console.log('Failed to start child process.');
                 res.send(500, data);
             });
-            res.writeHead(200, { "Content-Type": "text/event-stream",
-                "Cache-control": "no-cache" });
+
+            //res.writeHead(200, { "Content-Type": "text/event-stream",
+            //    "Cache-control": "no-cache" });
             //console.log('stdout'+'keras');
             //io.sockets.on('connection', function(socket){
             //    console.log('new user connected');
@@ -125,7 +122,7 @@ TrainHandler.route('/new')
             child.stdout.on('data', function(data){
                 console.log('stdout'+ data);
                 output += data.toString();
-                res.write('data: ' + data.toString() + "\n\n");
+             //   res.write('data: ' + data.toString() + "\n\n");
             });
             child.on('close', function(code){
                // if (code !== 0) {  res.send(500, code); }

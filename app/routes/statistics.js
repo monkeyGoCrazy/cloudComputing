@@ -2,16 +2,18 @@
 // =============================================================================
 // create our router
 var express = require('express');
-var AveragePacketBytes  = require('../models/statistics').AveragePacketBytes;
-var AveragePacketBits   = require('../models/statistics').AveragePacketBits;
+var AveragePacketRate  = require('../models/statistics').AveragePacketRate;
+var AveragePacketData   = require('../models/statistics').AveragePacketData;
 var AverageProtocolRate = require('../models/statistics').AverageProtocolRate;
 var ProtocolDistribution= require('../models/statistics').ProtocolDistribution;
 var AveragePacketSize   = require('../models/statistics').AveragePacketSize;
 var TopIP   = require('../models/statistics').TopIP;
 var TopCountry     = require('../models/statistics').TopCountry;
-var CountryDistribution     = require('../models/statistics').CountryDistribution;
+//var CountryDistribution     = require('../models/statistics').CountryDistribution;
 var BehaviorOfOneIP     = require('../models/statistics').BehaviorOfOneIP;
 var FeatureDistribution     = require('../models/statistics').FeatureDistribution;
+var Train = require('../models/train').Train;
+var Test = require('../models/test').Test;
 
 var StatisticHandler = express.Router();
 
@@ -23,22 +25,24 @@ StatisticHandler.use(function(req, res, next) {
 });
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-StatisticHandler.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to ddos world!' });
-});
+//StatisticHandler.route('/')
+//    .get(function(req, res) {
+//        res.json({ message: "Please select one record"});
+//        });
+//});
+
 
 
 // on routes that end in /bears/:bear_id
 // ----------------------------------------------------
-StatisticHandler.route('/:record_id')
-
-    // get the bear with that id
-    .get(function(req, res) {
-        Map.findById(req.params.record_id, function(err, map) {
-            if (err)
-                res.send(err);
-            res.json(map);
-        });
-    });
-StatisticHandler.r
+//StatisticHandler.route('/:record_id')
+//
+//    // get the bear with that id
+//    //.get(function(req, res) {
+//    //    Map.findById(req.params.record_id, function(err, map) {
+//    //        if (err)
+//    //            res.send(err);
+//    //        res.json(map);
+//    //    });
+//    });
 module.exports = StatisticHandler;

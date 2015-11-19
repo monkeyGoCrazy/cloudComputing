@@ -32,8 +32,6 @@ MapHandler.route('/map')
 
 			res.json({ message: 'map created!' });
 		});
-
-		
 	})
 
 	// get all the bears (accessed at GET http://localhost:8080/api/bears)
