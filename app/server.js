@@ -8,7 +8,7 @@ var app        = express();
 //server.listen(80);
 var morgan     = require('morgan');
 var router	   = require('./routes/map');
-var statisticsHandler	   = require('./routes/statistics');
+var statisticsHandler2	   = require('./routes/statistics2');
 var trainHandler    = require('./routes/train');
 var testHandler = require('./routes/test');
 
@@ -28,7 +28,7 @@ mongoose.connect('mongodb://localhost:27017/deepdefense'); // connect to our dat
 
 // REGISTER OUR ROUTES -------------------------------
 app.use('/map', router);
-app.use('/analysis',statisticsHandler);
+app.use('/analysis',statisticsHandler2);
 app.use('/train', trainHandler);
 app.use('/test', testHandler);
 // START THE SERVER

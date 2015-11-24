@@ -7,6 +7,12 @@ var StatisticsSchema = new Schema({
     user: Number,
     method: String,
     date: {type: Date, default: Date.now},
+    Map: {
+        geoData: [{ip: String, longitude: Number, latitude: Number}],
+        attackDS: [{source: String, destination: String, value: Number}],
+        normalDS: [{source: String, Destination: String}],
+        victimData: [{destination: String, value: Number}]
+    },
     AveragePacketRate: {
         normal_X: [Number],
         attack_X: [Number],
