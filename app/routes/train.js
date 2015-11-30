@@ -344,6 +344,10 @@ TrainHandler.route('/dataset')
         var dataset = new Dataset();
         dataset.CAIDA_normal = 'normal1';
         dataset.CAIDA_attack = 'attack1';
+        dataset.save(
+            function(err){
+                dataset.save()
+            });
         res.send('success');
     });
 
