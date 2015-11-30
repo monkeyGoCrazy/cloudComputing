@@ -3,7 +3,7 @@ var express = require('express');
 var server = require('http').Server(app);
 var app = express();
 var io = require('socket.io')(server);
-server.listen(8089,'127.0.0.1');
+server.listen(8083,'127.0.0.1');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var util = require('util');
@@ -339,6 +339,12 @@ TrainHandler.route('/dataset')
                 res.send(err);
             res.json(result);
         });
+    })
+    .post(function(req, res){
+        var dataset = new Dataset();
+        dataset.CAIDA_normal = 'normal1';
+        dataset.CAIDA_attack = 'attack1';
+        res.send('success');
     });
 
 module.exports = TrainHandler;
