@@ -11,7 +11,7 @@ var router	   = require('./routes/map');
 var statisticsHandler2	   = require('./routes/statistics2');
 var trainHandler    = require('./routes/train');
 var testHandler = require('./routes/test');
-
+var datasetHandler = require('./routes/dataset');
 // configure app
 app.use(morgan('dev')); // log requests to the console
 
@@ -49,6 +49,7 @@ app.use('/map', router);
 app.use('/analysis',statisticsHandler2);
 app.use('/train', trainHandler);
 app.use('/test', testHandler);
+app.use('/dataset', datasetHandler);
 // START THE SERVER
 // =============================================================================
 app.listen(port,'127.0.0.1');
