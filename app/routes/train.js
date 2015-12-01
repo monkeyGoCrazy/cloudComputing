@@ -181,11 +181,11 @@ TrainHandler.route('/')
                 child.stdout.on('data', function(data){
                     console.log('stdout'+ data);
                     output += data.toString();
-                    //   res.write('data: ' + data.toString() + "\n\n");
+                    res.send(200, output);
                 });
                 child.on('close', function(code){
                     // if (code !== 0) {  res.send(500, code); }
-                    res.send(200, output)
+                    res.send(200, output);
                 });
             }
             if (req.body.model === "CNN") {
