@@ -23,7 +23,7 @@ def slidingWindow(data,windowSize,step,threshold):
     data_label = data_label.astype(np.float64)
     data_feature = data_feature.as_matrix()
     data_label = data_label.as_matrix()
-    maxlen = windowSize
+    maxlen = int(windowSize)
     rate = threshold
     print('Vectorization...')
     X = np.zeros((len(data)-maxlen+1, maxlen, len(data_feature[0])))
@@ -49,20 +49,20 @@ def lstm(argv):
     print("Loading...")
     data_file = argv[1]
     windowSize = argv[3]
-    step = argv[4]
-    threshold = argv[5]
-    batchSize = argv[6]
-    outputDimension = argv[7]
-    sequence = argv[8]
-    percentage = argv[9]
-    validation = argv[10]
+    step = int(argv[4])
+    threshold = float(argv[5])
+    batchSize = int(argv[6])
+    outputDimension = int(argv[7])
+    sequence = int(argv[8])
+    percentage = float(argv[9])
+    validation = float(argv[10])
     innerActivation = argv[11]
     activation = argv[12]
-    dropOut = argv[13]
+    dropOut = float(argv[13])
     lossFunction = argv[14]
     classMode = argv[15]
     finalActivationFunction = argv[16]
-    epoch = argv[17]
+    epoch = int(argv[17])
 
     #use_col = range(5, 17)
     use_col = range(0, 43)
@@ -121,8 +121,8 @@ def lstm(argv):
     label='AUC = %0.2f'% roc_auc)
     plt.legend(loc='lower right')
     plt.plot([0,1],[0,1],'r--')
-    plt.xlim([-0.1,1.2])
-    plt.ylim([-0.1,1.2])
+    plt.xlim([0,1])
+    plt.ylim([0,1])
     plt.ylabel('True Positive Rate')
     plt.xlabel('False Positive Rate')
     plt.show()
