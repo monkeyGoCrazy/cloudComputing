@@ -48,9 +48,10 @@ TrainHandler.route('/')
                 res.send(err);
         });
         var stat = spawn('python',
-            ["Statistic.py"
+            ["../statistics/statistic.py"
                 ,statistic._id
-                ,req.body.dataSet
+                ,req.body.normal
+                ,req.body.attack
             ]);
         stat.stderr.on('data',function(data) {
             console.log('Failed to start child process.');
@@ -137,7 +138,7 @@ TrainHandler.route('/')
         if (req.body.engine === "keras") {
             if (req.body.model === "LSTM") {
                 var child = spawn('python',
-                    ["LSTM.py"
+                    ["machinelearning/LSTM.py"
                         , statistic._id
                         , req.body.normal
                         , req.body.attack
@@ -331,24 +332,6 @@ TrainHandler.route('/:_id')
         });
     });
 
-TrainHandler.route('/dataset')
-    // get the dataset
-    .get(function(req, res){
-        Dataset.find(function(err, result){
-           if (err)
-                res.send(err);
-            res.json(result);
-        });
-    })
-    .post(function(req, res){
-        var dataset = new Dataset();
-        dataset.CAIDA_normal = 'normal1';
-        dataset.CAIDA_attack = 'attack1';
-        dataset.save(
-            function(err){
-                dataset.save()
-            });
-        res.send('success');
-    });
+
 
 module.exports = TrainHandler;

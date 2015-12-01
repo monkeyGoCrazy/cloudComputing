@@ -1,20 +1,20 @@
-
 import pandas as pd
 import numpy as np
 import sys
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout, Activation
-from keras.layers.embeddings import Embedding
 from keras.layers.recurrent import LSTM
 
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
+from pymongo import MongoClient
+
 
 def labeling(x):
     if x >= 0.5:
         return 1
     return 0
-def slidingWindow(data):
+def slidingWindow(data,windowSize,step,threshold):
     print("Loading...")
     data = (data-data.min()) / (data.max() - data.min()+1)
     data_label = data['label'].apply(lambda x: labeling(x))
@@ -23,9 +23,8 @@ def slidingWindow(data):
     data_label = data_label.astype(np.float64)
     data_feature = data_feature.as_matrix()
     data_label = data_label.as_matrix()
-    maxlen = 150
-    step = 1
-    rate = 0.35
+    maxlen = windowSize
+    rate = threshold
     print('Vectorization...')
     X = np.zeros((len(data)-maxlen+1, maxlen, len(data_feature[0])))
     Y = np.zeros((len(data)-maxlen+1))
@@ -49,26 +48,24 @@ def labeling(x):
 def lstm(argv):
     print("Loading...")
     data_file = argv[1]
-    sequence = argv[3]
-    percentage = argv[4]
-    validation = argv[5]
-    innerActivation = argv[6]
-    activation = argv[7]
-    dropOut = argv[8]
-    lossFunction = argv[9]
-    classMode = argv[10]
-    finalActivationFunction = argv[11]
+    windowSize = argv[3]
+    step = argv[4]
+    threshold = argv[5]
+    batchSize = argv[6]
+    outputDimension = argv[7]
+    sequence = argv[8]
+    percentage = argv[9]
+    validation = argv[10]
+    innerActivation = argv[11]
+    activation = argv[12]
+    dropOut = argv[13]
+    lossFunction = argv[14]
+    classMode = argv[15]
+    finalActivationFunction = argv[16]
+    epoch = argv[17]
 
     #use_col = range(5, 17)
     use_col = range(1, 43)
-    # items = ['ip_proto', 'frame.encap_type',
-    #              'frame.len', 'http.content_length', 'tcp.ack', 'tcp.analysis.ack_rtt', 'tcp.analysis.bytes_in_flight', 'tcp.len',
-    #              'tcp.analysis.duplicate_ack_num', 'tcp.window_size', 'udp.length','label']
-    # items = ['duration', 'protocol_type', 'service', 'flag', 'src_bytes', 'dst_bytes', 'land', 'wrong_fragment', 'urgent', 'hot', 'num_failed_logins',
-    #          'logged_in','num_compromised', 'root_shell', 'su_attempted', 'num_root', 'num_file_creations', 'num_shells','num_access_files', 'num_outbound_cmds',
-    #          'is_host_login','is_guest_login', 'count', 'srv_count', 'serror_rate', 'srv_serror_rate','rerror_rate','srv_rerror_rate', 'same_srv_rate', 'diff_srv_rate', 'srv_diff_host_rate',
-    #          'dst_host_count', 'dst_host_srv_count', 'dst_host_same_src_rate', 'dst_host_diff_srv_rate','dst_host_same_src_port_rate', 'dst_host_srv_diff_host_rate',
-    #          'dst_host_serror_rate', 'dst_host_srv_serror_rate','dst_host_rerror_rate','dst_host_srv_rerror_rate','label']
     items = ['frame_time_relative', 'ip_id', 'ip_proto', 'frame_interface_id', 'frame_encap_type',
          'frame_offset_shift','frame_time_epoch', 'frame_time_delta', 'frame_len', 'frame_cap_len',
          'frame_marked', 'frame_ignored','ip_hdr_len', 'ip_dsfield', 'ip_dsfield_dscp', 'ip_dsfield_ecn',
@@ -78,7 +75,7 @@ def lstm(argv):
          'tcp_window_size_value', 'tcp_window_size', 'tcp_window_size_scalefactor','tcp.option_len',
          'tcp_options_timestamp_tsecr', 'tcp_analysis_bytes_in_flight', 'eth_lg', 'eth_ig', ]
     data = pd.read_csv(data_file, delimiter=',', error_bad_lines=False, header=None, names = items,usecols = use_col)
-    X,Y = slidingWindow(data)
+    X,Y = slidingWindow(data,windowSize,step,threshold)
     rate_label = 0.0
     for i in range(0,len(Y)):
         if Y[i] == 1:
@@ -94,20 +91,19 @@ def lstm(argv):
     X_test = X[seperate_index:]
     y_test = Y[seperate_index:]
 
-    batch_size = 128
+    batch_size = batchSize
 
     print('Build model...')
     model = Sequential()
     #model.add(Embedding(max_features, 256, input_length=max_len))
-    model.add(LSTM(output_dim = 128, activation=activation, inner_activation = innerActivation, input_shape=(150, 42)))
+    model.add(LSTM(output_dim = outputDimension, activation=activation, inner_activation = innerActivation, input_shape=(windowSize, 43)))
     model.add(Dropout(dropOut))
     model.add(Dense(1))
     model.add(Activation(finalActivationFunction))
-
     model.compile(loss=lossFunction, optimizer='sgd',class_mode=classMode)
 
     print("Train...")
-    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=4, validation_split=validation, show_accuracy=True)
+    model.fit(X_train, y_train, batch_size=batch_size, nb_epoch=epoch, validation_split=validation, show_accuracy=True)
     score, acc = model.evaluate(X_test, y_test, batch_size=batch_size, show_accuracy=True)
     test_preds = model.predict_proba(X_test, verbose=0)
     print(test_preds.shape)
@@ -132,6 +128,13 @@ def lstm(argv):
     plt.show()
     print('Test score:', score)
     print('Test accuracy:', acc)
+    client = MongoClient('mongodb://10.227.119.213:27017/')
+    db = client['deepdefense']
+    collection = db['Trains']
+    collection.find_one_and_update(
+    {'_id': argv[0]},
+    {'score': score, 'accurary': acc, 'auc': roc_auc, 'status': 'Success'}
+    )
 def main(argv):
     lstm(argv)
 

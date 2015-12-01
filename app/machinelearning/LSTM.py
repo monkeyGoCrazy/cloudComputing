@@ -6,7 +6,7 @@ def process(argv):
     print('preprocessing')
     argv[1] = MixerTime.time_process(argv)
     print('training')
-    DeepLearner2.lstm(argv)
+#DeepLearner2.lstm(argv)
 
 def main(argv):
     process(argv)
