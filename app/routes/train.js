@@ -136,7 +136,9 @@ TrainHandler.route('/')
             });
         }
         if (req.body.engine === "keras") {
-            console.log(req.body.normal);
+            console.log(req.body.normal
+            +' '+req.body.attack
+            +' '+req.body.windowSize);
             if (req.body.model === "LSTM") {
                 var child = spawn('python',
                     ["machinelearning/LSTM.py"
