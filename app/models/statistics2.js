@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var StatisticsSchema = new Schema({
-    _id: Number,
+    //_id: Number,
     dataSet: String,
     user: Number,
     method: String,
