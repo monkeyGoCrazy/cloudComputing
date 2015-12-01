@@ -36,7 +36,7 @@ def time_process(argv):
     ddos_frame.loc[:,'label'] = pd.Series(np.zeros(len(ddos_frame.index)))
     frames = [normal_frame, ddos_frame]
     result = pd.concat(frames)
-    result = result.sort('frame_time_relative', ascending=True)
+    result = result.sort_valuse(by='frame_time_relative', ascending=True)
     result = 100*(result-result.min()) / (result.max() - result.min()+1)
     result['label'] = (result['label']) / (result['label'].max() - result['label'].min())
 #   ddos_norm = 255*(ddos_frame-ddos_frame.min()) / (ddos_frame.max() - ddos_frame.min()+1)
