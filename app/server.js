@@ -3,9 +3,6 @@
 var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
-//var server = require('http').Server(app);
-//var io = require('socket.io')(server);
-//server.listen(80);
 var morgan     = require('morgan');
 var router	   = require('./routes/map');
 var statisticsHandler2	   = require('./routes/statistics2');
@@ -52,5 +49,5 @@ app.use('/test', testHandler);
 app.use('/dataset', datasetHandler);
 // START THE SERVER
 // =============================================================================
-app.listen(port,'127.0.0.1');
+app.listen(8081,'127.0.0.1');
 console.log('Magic happens on port ' + port);

@@ -6,8 +6,8 @@ import random as rm
 import sys
 
 def time_process(argv):
-    normal_data = argv[1]
-    ddos_data = argv[2]
+    normal_data = 'data/'+argv[1]
+    ddos_data = 'data/'+argv[2]
     rate = 1
     result_out = argv[0]+'preprocessed.csv'
     data_type = {}
@@ -22,10 +22,8 @@ def time_process(argv):
          'tcp_window_size_value', 'tcp_window_size', 'tcp_window_size_scalefactor','tcp.option_len',
          'tcp_options_timestamp_tsecr', 'tcp_analysis_bytes_in_flight', 'eth_lg', 'eth_ig', ]
 
-
     normal_frame = pd.read_csv(normal_data, delimiter=',', error_bad_lines=False, header=None, names = items, usecols = use_col)
     ddos_frame = pd.read_csv(ddos_data, delimiter=',', error_bad_lines=False, header=None, names = items, usecols = use_col)
-#   print(ddos_frame)
     normal_frame = normal_frame.loc[normal_frame['ip_proto'].isin([1,6])]
 
     normal_frame['frame_time_relative'] = normal_frame['frame_time_relative'] - normal_frame['frame_time_relative'].min()
@@ -39,7 +37,7 @@ def time_process(argv):
     frames = [normal_frame, ddos_frame]
     result = pd.concat(frames)
     result = result.sort('frame_time_relative', ascending=True)
-    result = 255*(result-result.min()) / (result.max() - result.min()+1)
+    result = 100*(result-result.min()) / (result.max() - result.min()+1)
     result['label'] = (result['label']) / (result['label'].max() - result['label'].min())
 #   ddos_norm = 255*(ddos_frame-ddos_frame.min()) / (ddos_frame.max() - ddos_frame.min()+1)
 #   print(result)
