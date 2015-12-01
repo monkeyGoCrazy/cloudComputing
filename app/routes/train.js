@@ -1,9 +1,5 @@
 // train routers
 var express = require('express');
-//var server = require('http').Server(app);
-//var app = express();
-//var io = require('socket.io')(server);
-//server.listen(8083,'127.0.0.1');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var util = require('util');
@@ -320,8 +316,14 @@ TrainHandler.route('/')
 
     }
 
-    );
-
+    )
+    .get(function(req, res) {
+        Train.find(function(err, result){
+            if (err)
+                res.send(err);
+            res.json(result);
+        });
+    });
 // on routes that end in /train/:_id
 // ----------------------------------------------------
 TrainHandler.route('/:_id')
