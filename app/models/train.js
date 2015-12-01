@@ -3,7 +3,6 @@ var Schema;
 Schema = mongoose.Schema;
 
 var TrainSchema = new Schema({
-    _id: Number,
     user: String,
     engine: String,
     model: String,
