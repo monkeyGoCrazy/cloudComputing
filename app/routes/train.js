@@ -1,9 +1,9 @@
 // train routers
 var express = require('express');
-var server = require('http').Server(app);
-var app = express();
-var io = require('socket.io')(server);
-server.listen(8083,'127.0.0.1');
+//var server = require('http').Server(app);
+//var app = express();
+//var io = require('socket.io')(server);
+//server.listen(8083,'127.0.0.1');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var util = require('util');
@@ -48,7 +48,7 @@ TrainHandler.route('/')
                 res.send(err);
         });
         var stat = spawn('python',
-            ["../statistics/statistic.py"
+            ["statistics/statistic.py"
                 ,statistic._id
                 ,req.body.normal
                 ,req.body.attack
@@ -70,7 +70,7 @@ TrainHandler.route('/')
             train.attack = req.body.attack;
             train.status = 'running';
             train.LSTMParameters.windowSize = req.body.windowSize;
-            train.LSTMParameters.step = req.body.step;
+            train.LSTMParameters.step = req.body.windowStep;
             train.LSTMParameters.threshold = req.body.threshold;
             train.LSTMParameters.outputDimension = req.body.outputDimension;
             train.LSTMParameters.sequence = req.body.sequence;
@@ -136,6 +136,7 @@ TrainHandler.route('/')
             });
         }
         if (req.body.engine === "keras") {
+            console.log(req.body.normal);
             if (req.body.model === "LSTM") {
                 var child = spawn('python',
                     ["machinelearning/LSTM.py"
