@@ -10,24 +10,12 @@ appName = "DDE"
 conf = SparkConf().setAppName(appName).setMaster("local")
 sc = SparkContext(conf=conf)
 
-'''
-parsePoint
-	This function takes a line and returns a labeled point
-Input : String - A line of input
-Output: Labeled Point - Labled point consisting of the class
-	label and the attributes of the row.
-Expects:
-	- The attributes in the row should be comma separated
-	- The first column should be the class label
-'''
+
 def parsePoint(line):
     values = [float(x) for x in line.split(',')]
     return LabeledPoint(values[0], values[1:])
 
-#Check if the dataset has been passed as an argument
-if(len(sys.argv)==1):
-	print("Please pass the filename of the dataset as a commandline argument")
-	exit(0);
+
 
 start = timeit.timeit()
 # Read the input data file

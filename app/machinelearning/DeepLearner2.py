@@ -65,7 +65,7 @@ def lstm(argv):
     epoch = argv[17]
 
     #use_col = range(5, 17)
-    use_col = range(1, 43)
+    use_col = range(0, 43)
     items = ['frame_time_relative', 'ip_id', 'ip_proto', 'frame_interface_id', 'frame_encap_type',
          'frame_offset_shift','frame_time_epoch', 'frame_time_delta', 'frame_len', 'frame_cap_len',
          'frame_marked', 'frame_ignored','ip_hdr_len', 'ip_dsfield', 'ip_dsfield_dscp', 'ip_dsfield_ecn',
@@ -73,7 +73,7 @@ def lstm(argv):
          'tcp_hdr_len', 'tcp_flags_res', 'tcp_flags_ns','tcp_flags_cwr', 'tcp_flags_ecn', 'tcp_flags_urg',
          'tcp_flags_ack', 'tcp_flags_push', 'tcp_flags_reset','tcp_flags_syn', 'tcp_flags_fin',
          'tcp_window_size_value', 'tcp_window_size', 'tcp_window_size_scalefactor','tcp.option_len',
-         'tcp_options_timestamp_tsecr', 'tcp_analysis_bytes_in_flight', 'eth_lg', 'eth_ig', ]
+         'tcp_options_timestamp_tsecr', 'tcp_analysis_bytes_in_flight', 'eth_lg', 'eth_ig', 'label']
     data = pd.read_csv(data_file, delimiter=',', error_bad_lines=False, header=None, names = items,usecols = use_col)
     X,Y = slidingWindow(data,windowSize,step,threshold)
     rate_label = 0.0

@@ -9,7 +9,7 @@ def time_process(argv):
     normal_data = 'data/'+argv[1]
     ddos_data = 'data/'+argv[2]
     rate = 1
-    result_out = argv[0]+'preprocessed.csv'
+    result_out = 'data/'+argv[0]+'preprocessed.csv'
     data_type = {}
     #should change the use_col to meet different dataset
     use_col = range(1, 43)
