@@ -9,7 +9,7 @@ app.get('/msg', function(req, res){
     res.writeHead(200, { "Content-Type": "text/event-stream",
         "Cache-control": "no-cache" });
 
-    var spw = cp.spawn('python', ['DeepLearner.py', '100', '127.0.0.1',1,1,1]),
+    var spw = cp.spawn('python', ['DeepLearner2.py', '100', '127.0.0.1',1,1,1]),
         str = "";
 
     spw.stdout.on('data', function (data) {

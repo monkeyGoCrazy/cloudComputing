@@ -8,6 +8,7 @@ from keras.layers.recurrent import LSTM
 from sklearn.metrics import roc_curve, auc
 import matplotlib.pyplot as plt
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 
 def labeling(x):
@@ -130,10 +131,10 @@ def lstm(argv):
     print('Test accuracy:', acc)
     client = MongoClient('mongodb://10.227.119.213:27017/')
     db = client['deepdefense']
-    collection = db['Trains']
+    collection = db['trains']
     collection.find_one_and_update(
-    {'_id': argv[0]},
-    {'score': score, 'accurary': acc, 'auc': roc_auc, 'status': 'Success'}
+        {"_id": ObjectId(argv[0])},
+        {"$set":{"score": score, "accurary": acc, "auc": roc_auc, "status": "Success"}}
     )
 def main(argv):
     lstm(argv)

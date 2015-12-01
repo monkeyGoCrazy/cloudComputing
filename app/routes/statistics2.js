@@ -25,6 +25,7 @@ StatisticHandler2.route('/')
             res.json(result);
         });
     });
+
 StatisticHandler2.route('/:_id')
     .get(function(req, res){
         Statistics.findById(req.params._id, function(err, statistics) {
@@ -35,16 +36,5 @@ StatisticHandler2.route('/:_id')
     });
 
 
-// on routes that end in /bears/:bear_id
-// ----------------------------------------------------
-//StatisticHandler.route('/:record_id')
-//
-//    // get the bear with that id
-//    //.get(function(req, res) {
-//    //    Map.findById(req.params.record_id, function(err, map) {
-//    //        if (err)
-//    //            res.send(err);
-//    //        res.json(map);
-//    //    });
-//    });
+
 module.exports = StatisticHandler2;

@@ -50,7 +50,7 @@ TrainHandler.route('/')
                 ,req.body.attack
             ]);
         stat.stderr.on('data',function(data) {
-            console.log('Failed to start child process.');
+            console.log(data);
             output += data + "\n";
         });
         stat.stdout.on('data', function(data) {
@@ -79,6 +79,10 @@ TrainHandler.route('/')
             train.LSTMParameters.classMode = req.body.classMode;
             train.LSTMParameters.finalActivationFunction = req.body.finalActivationFunction;
             train.LSTMParameters.epoch = req.body.epoch;
+            train.save(function (err) {
+                if (err)
+                    res.send(err);
+            });
         }
         if (req.body.model === "CNN") {
             ///
@@ -159,7 +163,7 @@ TrainHandler.route('/')
                     ]
                 );
                 child.stderr.on('data',function(data) {
-                    console.log('Failed to start child process.');
+                    console.log(data);
                     train.status = 'failed';
                     res.send(500, data);
                 });
@@ -175,7 +179,7 @@ TrainHandler.route('/')
                 //    })
                 //});
                 child.stdout.on('data', function(data){
-                    console.log('stdout'+ data);
+                    console.log(data);
                     output += data.toString();
                     res.send(200, output);
                 });

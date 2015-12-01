@@ -1,9 +1,9 @@
 // test routers
 var express = require('express');
-var server = require('http').Server(app);
-var app = express();
-var io = require('socket.io')(server);
-server.listen(8088,'127.0.0.1');
+//var server = require('http').Server(app);
+//var app = express();
+//var io = require('socket.io')(server);
+//server.listen(8088,'127.0.0.1');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var util = require('util');
@@ -26,19 +26,11 @@ TestHandler.use(function(req, res, next) {
 });
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 TestHandler.get('/', function(req, res,next) {
-    var json = {};
-    Test.find(function(err, result) {
+    Train.find('',function(err, result) {
         if (err)
             res.send(err);
-
-        json.test = result;
+        res.send(result);
     });
-    Train.find(function(err, result) {
-        if (err)
-            res.send(err);
-        json.train = result;
-    });
-    res.send(json);
     next();
 });
 
@@ -150,5 +142,13 @@ TestHandler.route('/:_id')
             res.json(stat);
         });
     });
-
+TestHandler.route('/dataset')
+    // get the dataset
+    .get(function(req, res){
+        Dataset.find(function(err, result){
+            if (err)
+                res.send(err);
+            res.json(result);
+        });
+    });
 module.exports = TestHandler;
