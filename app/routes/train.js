@@ -10,7 +10,6 @@ var morgan     = require('morgan');
 var bodyParser = require('body-parser');
 TrainHandler.use(morgan('dev')); // log requests to the console
 var Train = require('../models/train').Train;
-var Dataset = require('../models/dataset').Dataset;
 var Statistics = require('../models/statistics2').Statistics;
 TrainHandler.use(bodyParser.urlencoded({ extended: true }));
 TrainHandler.use(bodyParser.json());
@@ -39,6 +38,12 @@ TrainHandler.route('/')
     .post(function(req, res) {
         var output = "";
         var statistic = new Statistics();
+        statistic.type = "train";
+        statistic.engine = req.body.engine;
+        statistic.model = req.body.model;
+        statistic.normal = req.body.normal;
+        statistic.attack = req.body.attack;
+        statistic.status = 'running';
         statistic.save(function(err) {
             if (err)
                 res.send(err);
@@ -67,6 +72,7 @@ TrainHandler.route('/')
             train.status = 'running';
             train.LSTMParameters.windowSize = req.body.windowSize;
             train.LSTMParameters.step = req.body.windowStep;
+            train.LSTMParameters.batchSize = req.body.batchSize;
             train.LSTMParameters.threshold = req.body.threshold;
             train.LSTMParameters.outputDimension = req.body.outputDimension;
             train.LSTMParameters.sequence = req.body.sequence;
@@ -136,12 +142,9 @@ TrainHandler.route('/')
             });
         }
         if (req.body.engine === "keras") {
-            console.log(req.body.normal
-            +' '+req.body.attack
-            +' '+req.body.windowSize);
             if (req.body.model === "LSTM") {
                 var child = spawn('python',
-                    ["machinelearning/LSTM.py"
+                    ["machinelearning/trainLSTM.py"
                         , statistic._id
                         , req.body.normal
                         , req.body.attack
@@ -160,32 +163,37 @@ TrainHandler.route('/')
                         , req.body.classMode
                         , req.body.finalActivationFunction
                         , req.body.epoch
-                    ]
+                    ], {
+                        detached: true
+                    }
                 );
-                child.stderr.on('data',function(data) {
-                    console.log(data);
-                    train.status = 'failed';
-                    res.send(500, data);
-                });
+                child.unref();
 
-                //res.writeHead(200, { "Content-Type": "text/event-stream",
-                //    "Cache-control": "no-cache" });
-                //console.log('stdout'+'keras');
-                //io.sockets.on('connection', function(socket){
-                //    console.log('new user connected');
-                //    child.stdout.on('data', function(data){
-                //        output +=data.toString();
-                //        socket.emit('news', ouput);
-                //    })
-                //});
+                child.stderr.on('data', function (data) {
+                    console.log(data.toString());
+                    train.status = 'failed';
+                    statistic.status = 'failed';
+                    statistic.save(function(err) {
+                        if (err)
+                            res.send(err);
+                    });
+                    train.save(function(err) {
+                        if (err)
+                            res.send(err);
+                    });
+                });
+                res.send(200,'success');
                 child.stdout.on('data', function(data){
-                    console.log(data);
+                    console.log(data.toString());
                     output += data.toString();
-                    res.send(200, output);
+                    //res.send(200, output);
                 });
                 child.on('close', function(code){
-                    // if (code !== 0) {  res.send(500, code); }
                     res.send(200, output);
+                    train.save(function(err) {
+                        if (err)
+                            res.send(err);
+                    });
                 });
             }
             if (req.body.model === "CNN") {
@@ -246,13 +254,14 @@ TrainHandler.route('/')
                         console.log('Failed to start child process.');
                         res.send(500, data);
                     });
-                    child.stdout.on('data', function(data){
-                        console.log('stdout'+ data);
-                        output += data.toString();
-                    });
-                    child.on('close', function(code){
-                        res.send(200, output)
-                    });
+                    res.send('success');
+                    //child.stdout.on('data', function(data){
+                    //    console.log('stdout'+ data);
+                    //    output += data.toString();
+                    //});
+                    //child.on('close', function(code){
+                    //    res.send(200, output)
+                    //});
                 }
                 else if (req.body.model === "SVM"){
                     var child = spawn('python',

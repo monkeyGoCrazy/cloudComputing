@@ -1,34 +1,39 @@
-// ROUTES FOR OUR API
+// dashborad for DeepDefense
 // =============================================================================
 // create our router
 var express = require('express');
 var Statistics  = require('../models/statistics2').Statistics;
-
 var Train = require('../models/train').Train;
 var Test = require('../models/test').Test;
 
-var StatisticHandler2 = express.Router();
+var DashboardHandler = express.Router();
 
 // middleware to use for all requests
-StatisticHandler2.use(function(req, res, next) {
+DashboardHandler.use(function(req, res, next) {
     // do logging
     console.log('statistics is happening.');
     next();
 });
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-StatisticHandler2.route('/')
+// test route to make sure everything is working ()
+DashboardHandler.route('/')
     .get(function(req, res) {
-        Statistics.find({status: "Success"}).
-        sort({ date:-1}).
-        select({_id: 1, type: 1, model: 1, date: 1}).exec(function(err, result){
+        Train.find(function(err, result1){
             if (err)
                 res.send(err);
-            res.json(result);
+            console.log(result1.toString());
+            Test.find(function(err, result2){
+                if (err)
+                    res.send(err);
+                console.log(result2);
+                var finalObj = result1.concat(result2);
+                res.json(finalObj);
+            });
         });
+
     });
 
-StatisticHandler2.route('/:_id')
+DashboardHandler.route('/:_id')
     .get(function(req, res){
         Statistics.findById(req.params._id, function(err, statistics) {
             if (err)
@@ -39,4 +44,4 @@ StatisticHandler2.route('/:_id')
 
 
 
-module.exports = StatisticHandler2;
+module.exports = DashboardHandler;

@@ -22,7 +22,7 @@ def time_process(argv):
          'tcp_window_size_value', 'tcp_window_size', 'tcp_window_size_scalefactor','tcp.option_len',
          'tcp_options_timestamp_tsecr', 'tcp_analysis_bytes_in_flight', 'eth_lg', 'eth_ig', ]
 
-    normal_frame = pd.read_csv(normal_data, delimiter=',', error_bad_lines=False, header=None, names = items, usecols = use_col)
+    normal_frame = pd.read_csv(normal_data, delimiter=',', error_bad_lines=False, header=None, names = items,usecols = use_col)
     ddos_frame = pd.read_csv(ddos_data, delimiter=',', error_bad_lines=False, header=None, names = items, usecols = use_col)
     normal_frame = normal_frame.loc[normal_frame['ip_proto'].isin([1,6])]
 
@@ -48,7 +48,8 @@ def time_process(argv):
     return result_out
 #
 def main(argv):
-        time_process(argv)
+    print("successfully start")
+    time_process(argv)
 
 if __name__ == '__main__':
         main(sys.argv[1:])

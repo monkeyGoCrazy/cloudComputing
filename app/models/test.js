@@ -1,18 +1,22 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var Train = require('../models/train').Train;
 var TestSchema = new Schema({
-    _id: Number,
-    user: String,
+    type: {type: String, default:"test"},
     date: {type: Date, default: Date.now},
+    normal: String,
+    attack: String,
     status: String,
     engine: String,
     model: String,
-    TrainModel: String,
-    dataSet: String,
+    windowSize: String,
+    step: String,
+    threshold: String,
+    trainModelId: String,
+    batchSize: Number,
     accurary: Number,
-    falsePositive: Number,
-    falseNegitive: Number
+    auc: Number,
+    score: Number
+
 });
 //model's method: find findByld findOne where
 var Test = mongoose.model('Test', TestSchema);

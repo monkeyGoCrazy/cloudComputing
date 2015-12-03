@@ -2,9 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var StatisticsSchema = new Schema({
-    //_id: Number,
-    dataSet: String,
-    user: Number,
+    normal: String,
+    attack: String,
+    user: String,
+    type: String,
+    engine: String,
+    model: String,
+    status: String,
     method: String,
     date: {type: Date, default: Date.now},
     Map: {

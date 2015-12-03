@@ -4,11 +4,11 @@ var express    = require('express');
 var bodyParser = require('body-parser');
 var app        = express();
 var morgan     = require('morgan');
-var router	   = require('./routes/map');
 var statisticsHandler2	   = require('./routes/statistics2');
 var trainHandler    = require('./routes/train');
 var testHandler = require('./routes/test');
 var datasetHandler = require('./routes/dataset');
+var dashboardHandler = require('./routes/dashboard')
 // configure app
 app.use(morgan('dev')); // log requests to the console
 
@@ -42,12 +42,12 @@ mongoose.connect('mongodb://localhost:27017/deepdefense'); // connect to our dat
 
 
 // REGISTER OUR ROUTES -------------------------------
-app.use('/map', router);
 app.use('/analysis',statisticsHandler2);
 app.use('/train', trainHandler);
 app.use('/test', testHandler);
 app.use('/dataset', datasetHandler);
+app.use('/allTasks',dashboardHandler);
 // START THE SERVER
 // =============================================================================
-app.listen(8082,'10.227.119.213');
+app.listen(8082,'128.227.115.248');
 console.log('Magic happens on port ' + port);

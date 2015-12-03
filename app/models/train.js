@@ -4,17 +4,18 @@ Schema = mongoose.Schema;
 
 var TrainSchema = new Schema({
     user: String,
+    type: {type: String, default:"train"},
     engine: String,
     model: String,
     attack: String,
     normal: String,
     status: String,
+    windowSize: Number,
+    step: Number,
+    threshold: Number,
     date: {type: Date, default: Date.now},
     output_model: String,
     LSTMParameters: {
-        windowSize: Number,
-        step: Number,
-        threshold: Number,
         batchSize: Number,
         outputDimension: Number,
         sequence: Number,

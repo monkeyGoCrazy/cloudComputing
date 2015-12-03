@@ -1,9 +1,5 @@
 // test routers
 var express = require('express');
-//var server = require('http').Server(app);
-//var app = express();
-//var io = require('socket.io')(server);
-//server.listen(8088,'127.0.0.1');
 var spawn = require('child_process').spawn;
 var os = require('os');
 var util = require('util');
@@ -15,7 +11,6 @@ var bodyParser = require('body-parser');
 TestHandler.use(morgan('dev')); // log requests to the console
 var Test = require('../models/test').Test;
 var Statistics = require('../models/statistics2').Statistics;
-var Train = require('../models/train').Train;
 TestHandler.use(bodyParser.urlencoded({ extended: true }));
 TestHandler.use(bodyParser.json());
 
@@ -25,104 +20,116 @@ TestHandler.use(function(req, res, next) {
     next();
 });
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-TestHandler.get('/', function(req, res,next) {
-    Train.find('',function(err, result) {
-        if (err)
-            res.send(err);
-        res.send(result);
-    });
-    next();
-});
 
 // on routes that end in /new
 // ----------------------------------------------------
-TestHandler.route('/new')
+TestHandler.route('/')
 
     .post(function(req, res) {
         var output = "";
         var statistic = new Statistics();
+        statistic.type = "train";
+        statistic.engine = req.body.engine;
+        statistic.model = req.body.model;
+        statistic.normal = req.body.normal;
+        statistic.attack = req.body.attack;
+        statistic.status = 'running';
         statistic.save(function(err) {
             if (err)
                 res.send(err);
         });
         var stat = spawn('python',
-            ["Statistic.py"
+            ["statistics/statistic.py"
                 ,statistic._id
-                ,req.body.dataSet
+                ,req.body.normal
+                ,req.body.attack
             ]);
         stat.stderr.on('data',function(data) {
-            console.log('Failed to start child process.');
+            console.log(data.toString());
             output += data + "\n";
         });
         stat.stdout.on('data', function(data) {
             console.log(data);
             output += data + "\n";
         });
-        var model = "";
-        Train.findById(req.body.trainId, function(err, train){
-            model += train.output_model;
-        });
         var test = new Test();
         test._id = statistic._id;
         if (req.body.model === "LSTM") {
+            test.status = 'running';
             test.engine = req.body.engine;
+            test.normal = req.body.normal;
+            test.attack = req.body.attack;
             test.model = req.body.model;
-            test.dataSet = req.body.dataSet;
-            test.TrainModel = model;
-        }
-        if (req.body.model === "RNN") {
-            ///////////
+            test.trainModelId = req.body.trainModelId;
+            test.batchSize = req.body.batchSize;
+            test.windowSize = req.body.windowSize;
+            test.step = req.body.step;
+            test.threshold = req.body.threshold;
+            test.save(function(err) {
+                if (err)
+                    res.send(err);
+            });
         }
         if (req.body.model === "CNN") {
             ///
         }
-        train.save(function(err) {
-            if (err)
-                res.send(err);
-        });
 
         if (req.body.engine === "keras") {
-            var child = spawn('python',
-                ["DeepTest.py"
-                    , test._id
-                    , model
-                    , req.body.dataSet
-                ]
-            );
-            child.stderr.on('data',function(data) {
-                console.log('Failed to start child process.');
-                res.send(500, data);
-            });
-            res.writeHead(200, { "Content-Type": "text/event-stream",
-                "Cache-control": "no-cache" });
-            child.stdout.on('data', function(data){
-                console.log('stdout'+ data);
-                output += data.toString();
-                res.write('data: ' + data.toString() + "\n\n");
-            });
-            child.on('close', function(code){
-                // if (code !== 0) {  res.send(500, code); }
-                res.send(200, output)
-            });
+            if (req.body.model === "LSTM") {
+                var child = spawn('python',
+                    ["machinelearning/testLSTM.py"
+                        , test._id
+                        , req.body.normal
+                        , req.body.attack
+                        , req.body.trainModelId
+                        , req.body.windowSize
+                        , req.body.step
+                        , req.body.threshold
+                        , req.body.batchSize
+                    ], {
+                        detached: true
+                    }
+                );
+                child.unref();
+                child.stderr.on('data', function (data) {
+                    console.log(data.toString());
+                    statistic.status = "failed";
+                    test.status = 'failed';
+                    statistic.save(function(err) {
+                        if (err)
+                            res.send(err);
+                    });
+                    test.save(function(err) {
+                        if (err)
+                            res.send(err);
+                    });
+                });
+                res.send(200, 'success');
+                child.stdout.on('data', function (data) {
+                    console.log(data.toString());
+                    output += data.toString();
+                });
+                child.on('close', function (code) {
+                    res.send(200, output);
+                    test.save(function(err) {
+                        if (err)
+                            res.send(err);
+                    });
+                });
+            }
         }
-
     })
 
     // get all the bears (accessed at GET http://localhost:8080/api/bears)
     .get(function(req, res) {
         var json = {};
-        Train.find(function(err, result) {
-            if (err)
-                res.send(err);
-
-            json.train = result;
-        });
         Test.find(function(err,result) {
            if (err)
                res.send(err);
-            json.test = result;
+            res.send(result);
+           // json.test = result;
         });
-        res.send(json);
+      //  res.send(json);
     });
 
 // on routes that end in /test/:_id
@@ -140,15 +147,6 @@ TestHandler.route('/:_id')
             if (err)
                 res.send(err);
             res.json(stat);
-        });
-    });
-TestHandler.route('/dataset')
-    // get the dataset
-    .get(function(req, res){
-        Dataset.find(function(err, result){
-            if (err)
-                res.send(err);
-            res.json(result);
         });
     });
 module.exports = TestHandler;
