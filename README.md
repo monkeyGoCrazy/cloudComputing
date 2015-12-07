@@ -1,32 +1,19 @@
-<<<<<<< HEAD
-# [Start Bootstrap](http://startbootstrap.com/) - [SB Admin](http://startbootstrap.com/template-overviews/sb-admin/)
 
-[SB Admin](http://startbootstrap.com/template-overviews/sb-admin/) is an open source, admin dashboard template for [Bootstrap](http://getbootstrap.com/) created by [Start Bootstrap](http://startbootstrap.com/).
-
-## Getting Started
-
-To use this template, choose one of the following options to get started:
-* Download the latest release on Start Bootstrap
-* Fork this repository on GitHub
-
-## Bugs and Issues
-
-Have a bug or an issue with this template? [Open a new issue](https://github.com/IronSummitMedia/startbootstrap-sb-admin/issues) here on GitHub or leave a comment on the [template overview page at Start Bootstrap](http://startbootstrap.com/template-overviews/sb-admin/).
-
-## Creator
-
-Start Bootstrap was created by and is maintained by **David Miller**, Managing Parter at [Iron Summit Media Strategies](http://www.ironsummitmedia.com/).
-
-* https://twitter.com/davidmillerskt
-* https://github.com/davidtmiller
-
-Start Bootstrap is based on the [Bootstrap](http://getbootstrap.com/) framework created by [Mark Otto](https://twitter.com/mdo) and [Jacob Thorton](https://twitter.com/fat).
-
-## Copyright and License
-
-Copyright 2013-2015 Iron Summit Media Strategies, LLC. Code released under the [Apache 2.0](https://github.com/IronSummitMedia/startbootstrap-sb-admin/blob/gh-pages/LICENSE) license.
-=======
 # cloudComputing
 Deep Learning Platform for network analysis
 This is an ongoing project. The initial goal is to build a deep learning platform and network ddos traffic analysis system.
->>>>>>> 7ea36dd2bacad110b94f7a2e082c5a5cb3a188b6
+
+# Target
+Building a Machine Learning based Off-line Network Analysis and Attack Detection Application
+Training and Testing Model Management
+Data Preprocessing, Manipulating and Visualization
+Full Stack Web Service for Deep Learning
+
+# System Architecture
+The architecture of our system includes a front end framework (Angular.js), a back end server (Node.js and express), MongoDB Database, Data Analysis Engine, Defence Engine. For the web framework, we use the mean stack framework (mongoDB, Express, Angular.js and Node.js).
+    
+    Front end GUI: The function of the front end is to show a dashboard of the current training and testing result of the analysis.
+    
+    Back End Server: Back-end server takes the responsibility to get response to the front-end website, get access to the database and run the data statistic engine.
+
+    Deep Learning Engine: The deep learning enigine will make use of the Hadoop clusters to train the model in a more efficient way.
