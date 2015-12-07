@@ -1,0 +1,33 @@
+{	"recordId": 1,
+	"geoData":[
+		{
+			"ip":"192.168.1.1",
+			"longitude":120.966,
+			"latitude":14.583
+		},
+		{
+			"ip":"192.168.1.2",
+			"longitude":123.234,
+			"latitude":15.267
+		}
+	],
+	"attackDS":[
+		{
+			"source":"192.168.1.1",
+			"destination":"192.168.1.2",
+			"value":25.7
+		}
+	],
+	"normalDS":[
+		{
+			"source":"192.168.1.1",
+			"destination":"192.168.1.2"
+		}
+	],
+	"victimData":[
+		{
+			"destination":"192.168.1.1",
+			"value":30.6
+		}
+	]
+}
