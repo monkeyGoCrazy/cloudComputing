@@ -1,0 +1,167 @@
+<div id="page-wrapper">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Train
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="#dashboard">Dashboard</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-edit"></i> Train
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+
+                <div class="row" ng-controller = "trainCtrl">
+                    <div class="col-lg-6">
+                        <div class="list-group">
+                            <label>Deep Learning Engine</label>
+                            <a href="#keras" class="list-group-item active">Keras</a>
+                            <a href="#mllib" class="list-group-item">MLLib</a>
+
+                        </div>
+
+                        <div class="list-group">
+                            <label>Choose Model here</label>
+                            <a href="#LSTM" class="list-group-item active">LSTM</a>
+                            <a href="#CNN" class="list-group-item">CNN</a>
+                        </div>
+ 
+                        <form role="form">
+
+                            <div class="form-group">
+                                <label>Dataset</label>
+                            <div class="list-group">
+                                <a href="#KDDCUP" class="list-group-item">KDDCUP</a>
+                                <a href="#CAIDA" class="list-group-item active">CAIDA</a>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Dataset detail</label>
+                                <select class="form-control" ng-model="innerActivation">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Squence Maximum Length</label>
+                                <input class="form-control" placeholder="Please input value from 0-1000" type="text" ng-model="userSequence">
+                            </div>
+
+                             <div class="form-group">
+                                <label>Inner Activation Function of LSTM</label>
+                                <select class="form-control" ng-model="innerActivation">
+                                    <option>Softmax</option>
+                                    <option>Softplus</option>
+                                    <option>Relu</option>
+                                    <option>Tank</option>
+                                    <option>Sigmoid</option>                                    
+                                    <option>Hard_sigmoid</option>
+                                    <option>Linear</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Activation Function of LSTM</label>
+                                <select class="form-control" ng-model="activation">
+                                    <option>Softmax</option>
+                                    <option>Softplus</option>
+                                    <option>Relu</option>
+                                    <option>Tank</option>
+                                    <option>Sigmoid</option>                                    
+                                    <option>Hard_sigmoid</option>
+                                    <option>Linear</option>
+                                </select>
+                            </div>
+
+
+
+                            <div class="form-group">
+                                <label>Percentage of Train</label>
+                                <input class="form-control" placeholder="Please input value from 0-1" type="text" ng-model="userPercentage">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Validation</label>
+                                <input class="form-control" placeholder="Please input value from 0-1" type="text" ng-model="userValidation">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Drop Out</label>
+                                <input class="form-control" placeholder="Please input value from 0-1" tyoe="text" ng-model="userDropOut">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Loss Function</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="mean_squared_error" checked ng-model="lossFunction">mean_squared_error
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="mean_absolute_error" ng-model="lossFunction">mean_absolute_error
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="mean_absolute_percentage_error" ng-model="lossFunction">mean_absolute_percentage_error
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="mean_squared_logarithmic_error" ng-model="lossFunction">mean_squared_logarithmic_error
+                                    </label>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label>Class Mode</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="binary" checked ng-model="classMode">binary
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="categorical" ng-model="classMode">categorical
+                                </label>
+                            </div>
+
+                             <div class="form-group">
+                                <label>Final Activation Function</label>
+                                <select class="form-control" ng-model="finalActivationFunction">
+                                    <option>Softmax</option>
+                                    <option>Softplus</option>
+                                    <option>Relu</option>
+                                    <option>Tank</option>
+                                    <option>Sigmoid</option>                                    
+                                    <option>Hard_sigmoid</option>
+                                    <option>Linear</option>
+                                </select>
+                            </div>
+
+                            <button ng-click="submit()" type="submit" class="btn btn-default" id="submitBtn">Submit</button>
+                            <button type="reset" class="btn btn-default" id="reset">Reset</button>                   
+                        </form>
+
+                    </div>
+                           
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->

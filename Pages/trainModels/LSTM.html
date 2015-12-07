@@ -1,0 +1,299 @@
+<div id="page-wrapper"  ng-controller = "trainCtrl">
+
+            <div class="container-fluid">
+
+                <!-- Page Heading -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">
+                            Train
+                        </h1>
+                        <ol class="breadcrumb">
+                            <li>
+                                <i class="fa fa-dashboard"></i>  <a href="#dashboard">Dashboard</a>
+                            </li>
+                            <li class="active">
+                                <i class="fa fa-edit"></i> Train
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- /.row -->
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="list-group">
+                            <label>Deep Learning Engine</label>
+                            <a href="#keras" class="list-group-item active" ng-value="userEngine='keras'">Keras</a>
+                            <a href="#mllib" class="list-group-item">MLLib</a>
+
+                        </div>
+
+                        <div class="list-group">
+                            <label>Choose Model here</label>
+                            <a href="#LSTM" class="list-group-item active" ng-value="userModel='LSTM'">LSTM</a>
+                            <a href="#CNN" class="list-group-item">CNN</a>
+                        </div>
+ 
+                        <form role="form">
+
+                            <div class="form-group" ng-class="{'has-error': (!userWinSize||(userWinSize<=1000&&userWinSize>=1))? false:true}">
+                                <label class="control-label" ng-class="{'inputError': (!userWinSize||(userWinSize<=1000&&userWinSize>=1))? false:true}">Window Size</label>
+                                <input class="form-control" placeholder="Please input value from 1-1000" type="text" ng-model="userWinSize">
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': (!userBatchSize||(userBatchSize<=1024&&userBatchSize>=1))? false:true}">
+                                <label class="control-label" ng-class="{'inputError': (!userBatchSize||(userBatchSize<=1024&&userBatchSize>=1))? false:true}">Batch Size</label>
+                                <input class="form-control" placeholder="Please input value from 1-1024" type="text" ng-model="userBatchSize">
+                            </div>
+
+
+                            <div class="form-group" ng-class="{'has-error': (!userStep||(userStep<=1000&&userStep>=1))? false:true}">
+                                <label class="control-label" ng-class="{'inputError': (!userStep||(userStep<=1000&&userStep>=1))? false:true}">Step</label>
+                                <input class="form-control" placeholder="Please input value from 1-1000" type="text" ng-model="userStep">
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': (!userThreshold||(userThreshold<=1&&userThreshold>=0))? false:true}">
+                                <label class="control-label" ng-class="{'inputError': (!userThreshold||(userThreshold<=1&&userThreshold>=0))? false:true}">Threshold</label>
+                                <input class="form-control" placeholder="Please input value from 0-1" type="text" ng-model="userThreshold">
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': (!userOutputDimension||(userOutputDimension>=1&&userOutputDimension<=65536))? false:true}">
+                                <label class="control-label" ng-class="{'has-error': (!userOutputDimension||(userOutputDimension<=1&&userOutputDimension>=65536))? false:true}">Output Dimension</label>
+                                <input class="form-control" placeholder="Please input value of n times to 2" type="text" ng-model="userOutputDimension">
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': (!userEpoch||(userEpoch>=1&&userEpoch<=50))? false:true}">
+                                <label class="control-label" ng-class="{'has-error': (!userEpoch||(userEpoch>=1&&userEpoch<=50))? false:true}">Epoch</label>
+                                <input class="form-control" placeholder="Please input value from 1-50" type="text" ng-model="userEpoch">
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': (!userSequence||(userSequence>=1&&userSequence<=1000))? false:true}">
+                                 <label class="control-label" ng-class="{'has-error': (!userSequence||(userSequence>=1&&userSequence<=1000))? false:true}">Squence Maximum Length</label>
+                                <input class="form-control" placeholder="Please input value from 0-1000" type="text" ng-model="userSequence">
+                            </div>
+
+
+                             <div class="form-group">
+                                <label>Inner Activation Function of LSTM</label>
+                                <select class="form-control" ng-model="innerActivation">
+                                    <option>softmax</option>
+                                    <option>softplus</option>
+                                    <option>relu</option>
+                                    <option>tank</option>
+                                    <option>sigmoid</option>                                    
+                                    <option>hard_sigmoid</option>
+                                    <option>linear</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Activation Function of LSTM</label>
+                                <select class="form-control" ng-model="activation">
+                                    <option>softmax</option>
+                                    <option>softplus</option>
+                                    <option>relu</option>
+                                    <option>tank</option>
+                                    <option>sigmoid</option>                                    
+                                    <option>hard_sigmoid</option>
+                                    <option>linear</option>
+                                </select>
+                            </div>
+
+
+
+                            <div class="form-group" ng-class="{'has-error': (!userPercentage||(userPercentage<=1&&userPercentage>=0))? false:true}">
+                                <label class="control-label" ng-class="{'inputError': (!userPercentage||(userPercentage<=1&&userPercentage>=0))? false:true}">Percentage of Train</label>
+                                <input class="form-control" placeholder="Please input value from 0-1" type="text" ng-model="userPercentage">
+                            </div>
+
+                             <div class="form-group" ng-class="{'has-error': (!userValidation||(userValidation<=1&&userValidation>=0))? false:true}">
+                                <label class="control-label" ng-class="{'inputError': (!userValidation||(userValidation<=1&&userValidation>=0))? false:true}">Validation</label>
+                                <input class="form-control" placeholder="Please input value from 0-1" type="text" ng-model="userValidation">
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': (!userDropOut||(userDropOut<=1&&userDropOut>=0))? false:true}">
+                                <label class="control-label" ng-class="{'inputError': (!userDropOut||(userDropOut<=1&&userDropOut>=0))? false:true}">Drop Out</label>
+                                <input class="form-control" placeholder="Please input value from 0-1" tyoe="text" ng-model="userDropOut">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label>Loss Function</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios1" value="mean_squared_error" checked ng-model="lossFunction">mean_squared_error
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios2" value="mean_absolute_error" ng-model="lossFunction">mean_absolute_error
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="mean_absolute_percentage_error" ng-model="lossFunction">mean_absolute_percentage_error
+                                    </label>
+                                </div>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="optionsRadios" id="optionsRadios3" value="mean_squared_logarithmic_error" ng-model="lossFunction">mean_squared_logarithmic_error
+                                    </label>
+                                </div>
+
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Choose Dataset</label>
+                                <button ng-click="getDataSet()" type="submit" class="btn btn-default" id="chooseDatasetBtn">Get Datasets</button>
+                            </div>
+                            <div class="form-group" ng-hide="trainDatasetHide">
+                                <label>Attack Dataset</label>
+                                <select class="form-control" ng-model="attackDataset.selected">
+                                    <option ng-repeat="atkset in attackDataset.options">{{atkset}}</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group" ng-hide="trainDatasetHide">
+                                <label>Normal Dataset</label>
+                                <select class="form-control" ng-model="normalDataset.selected">
+                                    <option ng-repeat="normset in normalDataset.options">{{normset}}</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Class Mode</label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="binary" checked ng-model="classMode">binary
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="categorical" ng-model="classMode">categorical
+                                </label>
+                            </div>
+
+                             <div class="form-group">
+                                <label>Final Activation Function</label>
+                                <select class="form-control" ng-model="finalActivationFunction">
+                                    <option>softmax</option>
+                                    <option>softplus</option>
+                                    <option>relu</option>
+                                    <option>tank</option>
+                                    <option>sigmoid</option>                                    
+                                    <option>hard_sigmoid</option>
+                                    <option>linear</option>
+                                </select>
+                            </div>
+                            
+                           <!-- <div class="form-group">
+                                <label>Dataset</label>
+                            <div class="list-group" ng-model="userChosenDataset">
+                                <a class="list-group-item" ng-click="getDatasets()">KDDCUP</a>
+                                <a class="list-group-item" ng-click="getDatasets()">CAIDA</a>
+                            </div>-->
+
+                         <!--   <div class="form-group">
+                                <label>Dataset</label>
+                                <select class="form-control" ng-change="getDatasets()">
+                                    <option>KDDCUP</option>
+                                    <option>CAIDA</option>
+                                </select>
+                            </div>
+                        -->
+                </div>
+                <!-- /.row -->
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h2>LSTM Parameters</h2>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Window Size</td>
+                                        <td>{{userWinSize}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Batch Size</td>
+                                        <td>{{userBatchSize}}</td>
+                                    </tr>                                    
+                                    <tr>
+                                        <td>Step</td>
+                                        <td>{{userStep}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Threshold</td>
+                                        <td>{{userThreshold}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Output Dimension</td>
+                                        <td>{{userOutputDimension}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Epoch</td>
+                                        <td>{{userEpoch}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Squence Maximum Length</td>
+                                        <td>{{userSequence}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Inner Activation Function of LSTM</td>
+                                        <td>{{innerActivation}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Activation Function of LSTM</td>
+                                        <td>{{activation}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Percentage of Train</td>
+                                        <td>{{userPercentage}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Validation</td>
+                                        <td>{{userValidation}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Drop Out</td>
+                                        <td>{{userDropOut}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Loss Function</td>
+                                        <td>{{lossFunction}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Attack Dataset</td>
+                                        <td>{{attackDataset.selected}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Normal Dataset</td>
+                                        <td>{{normalDataset.selected}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Class Mode</td>
+                                        <td>{{classMode}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Final Activation Function</td>
+                                        <td>{{finalActivationFunction}}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <button ng-click="submit()" type="submit" class="btn btn-primary" id="submitBtn" ng-value="submitFrom='LSTM'">Submit</button>
+                            <button type="reset" class="btn btn-default" id="reset">Reset</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- /#page-wrapper -->
