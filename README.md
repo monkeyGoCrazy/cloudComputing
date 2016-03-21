@@ -5,6 +5,7 @@ Deep Learning Platform for network analysis
 This is an ongoing project. The initial goal is to build a deep learning platform and network ddos traffic analysis system.
 
 # Target
+
 Building a Machine Learning based Off-line Network Analysis and Attack Detection Application.
 
 Training and Testing Model Management.
