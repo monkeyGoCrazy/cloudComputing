@@ -8,7 +8,7 @@ This is an ongoing project. The initial goal is to build a deep learning platfor
 
 Building a Machine Learning based Off-line Network Analysis and Attack Detection Application.
 
-Training and Testing Model Management.
+Training and Testing Model Management and Storing. 
 
 Data Preprocessing, Manipulating and Visualization.
 
